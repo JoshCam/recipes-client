@@ -6,7 +6,7 @@ const Recipes = () => {
   return (
     <View>
       <Text>Recipes</Text>
-      <Link href="Recipes/Ingredients">Ingredients</Link>
+      <Link href="recipes/ingredients">Ingredients</Link>
     </View>
   );
 };

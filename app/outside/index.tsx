@@ -6,7 +6,7 @@ const index = () => {
   return (
     <View>
       <Text>Outside</Text>
-      <Link href="/(tabs)/Feed">Back to tabs</Link>
+      <Link href="/(tabs)/profile">Back to tabs</Link>
     </View>
   );
 };
