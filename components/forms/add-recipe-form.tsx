@@ -5,12 +5,14 @@ import { Ingredient, Recipe } from "../../types/recipe.type";
 import IngredientInput from "../inputs/ingredient";
 
 const AddRecipeForm = () => {
+  const [recipe, setRecipe] = useState<Recipe>();
   const [recipeName, setRecipeName] = useState<Recipe["name"]>("");
   const [ingredients, setIngredients] = useState<Ingredient[]>();
+  const [newIngredient, setNewIngredient] = useState<Ingredient>();
 
   const getIngredientData = (data) => {
-    ingredients.push(data);
-    setIngredients(ingredients);
+    console.log("THIS", data);
+    setNewIngredient(data);
   };
 
   return (
@@ -22,7 +24,7 @@ const AddRecipeForm = () => {
         placeholder="Recipe Name"
       />
       <IngredientInput getIngredientData={getIngredientData} />
-      <Pressable onPress={() => console.log(recipeName)}>
+      <Pressable onPress={() => console.log(newIngredient)}>
         <Text>TEST</Text>
       </Pressable>
     </View>

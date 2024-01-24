@@ -1,18 +1,25 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "./dropdown";
 import { Ingredient } from "../../types/recipe.type";
+import { UnitOptions } from "../../constants/unit-options";
 
 const IngredientInput = ({ getIngredientData }) => {
   const [ingredient, setIngredient] = useState<Ingredient["ingredient"]>("");
   const [amount, setAmount] = useState<Ingredient["amount"]>("");
   const [unit, setUnit] = useState<Ingredient["unit"]>("grams");
 
-  const getDropDownData = (data) => {
+  const getDropDownData = (data: Ingredient["unit"]) => {
     setUnit(data);
   };
 
-  getIngredientData({ ingredient, amount, unit });
+  useEffect(() => {
+    /**
+     * This has to go inside a useEffect that listens to only unit else it
+     * keeps causing infinite rerenders
+     */
+    getIngredientData({ ingredient, amount, unit });
+  }, [unit]);
 
   return (
     <View style={{ flexDirection: "row" }}>
@@ -27,7 +34,7 @@ const IngredientInput = ({ getIngredientData }) => {
         onChangeText={(e) => setAmount(e)}
         placeholder="Amount"
       />
-      <Dropdown getDropdownData={getDropDownData} />
+      <Dropdown options={UnitOptions} getDropdownData={getDropDownData} />
     </View>
   );
 };
