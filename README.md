@@ -1,13 +1,5 @@
-# Expo Router Example
+# Recipes App
 
-Use [`expo-router`](https://docs.expo.dev/router/introduction/) to build native navigation using files in the `app/` directory.
+Small side project I've been sitting on for a while and finally getting around to. In essence it's a recipe book app but with a few twists!
 
-## 🚀 How to use
-
-```sh
-npx create-expo-app -e with-router
-```
-
-## 📝 Notes
-
-- [Expo Router: Docs](https://docs.expo.dev/router/introduction/)
+I'm using React Native and learning as I go.
