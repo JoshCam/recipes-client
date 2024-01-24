@@ -4,7 +4,7 @@ import Dropdown from "./dropdown";
 import { Ingredient } from "../../types/recipe.type";
 import { UnitOptions } from "../../constants/unit-options";
 
-const IngredientInput = ({ getIngredientData }) => {
+const IngredientInput = ({ getIngredientData, index }) => {
   const [ingredient, setIngredient] = useState<Ingredient["ingredient"]>("");
   const [amount, setAmount] = useState<Ingredient["amount"]>("");
   const [unit, setUnit] = useState<Ingredient["unit"]>("grams");
@@ -18,7 +18,7 @@ const IngredientInput = ({ getIngredientData }) => {
      * This has to go inside a useEffect that listens to only unit else it
      * keeps causing infinite rerenders
      */
-    getIngredientData({ ingredient, amount, unit });
+    getIngredientData(index, { ingredient, amount, unit });
   }, [unit]);
 
   return (
