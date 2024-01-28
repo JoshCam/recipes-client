@@ -5,8 +5,8 @@ import { Ingredient } from "../../types/recipe.type";
 import { UnitOptions } from "../../constants/unit-options";
 
 const IngredientInput = ({ getIngredientData, index }) => {
-  const [ingredient, setIngredient] = useState<Ingredient["ingredient"]>("");
-  const [amount, setAmount] = useState<Ingredient["amount"]>("");
+  const [ingredient, setIngredient] = useState<Ingredient["ingredient"]>();
+  const [amount, setAmount] = useState<Ingredient["amount"]>();
   const [unit, setUnit] = useState<Ingredient["unit"]>();
 
   const getDropDownData = (data: Ingredient["unit"]) => {
@@ -20,6 +20,9 @@ const IngredientInput = ({ getIngredientData, index }) => {
      */
     getIngredientData(index, { ingredient, amount, unit });
   }, [unit]);
+
+  // TODO:
+  // add validation that all ingredient inputs are valid
 
   return (
     <View style={{ flexDirection: "row" }}>

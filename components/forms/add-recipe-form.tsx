@@ -7,40 +7,35 @@ import IngredientInput from "../inputs/ingredient";
 const AddRecipeForm = () => {
   const [recipe, setRecipe] = useState<Recipe>();
   const [recipeName, setRecipeName] = useState<Recipe["name"]>("");
-  const [ingredients, setIngredients] = useState<Ingredient[]>();
+  // Gets set for each new ingredient that gets added
   const [newIngredient, setNewIngredient] = useState<Ingredient>();
-
-  // this will be attached with each input onChangeText
-  const [textValue, setTextValue] = useState();
-  // our number of inputs, we can add the length or decrease
-  const [numInputs, setNumInputs] = useState(1);
   // all our input fields are tracked with this array
-  const refInputs = useRef<string[]>([textValue]);
+  const ingredients = useRef<Ingredient[]>([newIngredient]);
+  // our number of ingredient inputs
+  const [numInputs, setNumInputs] = useState(1);
 
-  const getIngredientData = (data) => {
-    debugger;
-    console.log("THIS", data);
-    setTextValue(data);
-  };
-
-  const setInputValue = (index: number, value) => {
-    // Store input value to refInputs array to track them
-    const inputs = refInputs.current;
+  const getIngredientData = (index: number, value) => {
+    // Store input value to ingredients array to track them
+    const inputs = ingredients.current;
     inputs[index] = value;
     // set value to the input field on change
-    setTextValue(value);
+    setNewIngredient(value);
   };
 
   const addInput = () => {
     // Add a new element
-    refInputs.current.push("");
+    ingredients.current.push({
+      ingredient: undefined,
+      amount: undefined,
+      unit: undefined,
+    });
     // increase the number of inputs
     setNumInputs((value) => value + 1);
   };
 
   const removeInput = (i: number) => {
     // remove from the array by index value
-    refInputs.current.splice(i, 1)[0];
+    ingredients.current.splice(i, 1)[0];
     // decrease the number of inputs
     setNumInputs((value) => value - 1);
   };
@@ -49,7 +44,7 @@ const AddRecipeForm = () => {
   for (let i = 0; i < numInputs; i++) {
     inputs.push(
       <View key={i}>
-        <IngredientInput getIngredientData={setInputValue} index={i} />
+        <IngredientInput getIngredientData={getIngredientData} index={i} />
         <Pressable onPress={() => removeInput(i)}>
           <Text>-</Text>
         </Pressable>
@@ -70,7 +65,7 @@ const AddRecipeForm = () => {
         <Text>+ Add New Ingredient</Text>
       </Pressable>
       {/* Test button */}
-      <Pressable onPress={() => console.log(refInputs)}>
+      <Pressable onPress={() => console.log(ingredients)}>
         <Text>TEST</Text>
       </Pressable>
     </View>
