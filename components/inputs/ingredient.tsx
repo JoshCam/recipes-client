@@ -7,7 +7,7 @@ import { UnitOptions } from "../../constants/unit-options";
 const IngredientInput = ({ getIngredientData, index }) => {
   const [ingredient, setIngredient] = useState<Ingredient["ingredient"]>("");
   const [amount, setAmount] = useState<Ingredient["amount"]>("");
-  const [unit, setUnit] = useState<Ingredient["unit"]>("grams");
+  const [unit, setUnit] = useState<Ingredient["unit"]>();
 
   const getDropDownData = (data: Ingredient["unit"]) => {
     setUnit(data);
