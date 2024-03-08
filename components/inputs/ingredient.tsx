@@ -1,10 +1,18 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, TextInput, StyleSheet } from "react-native";
+import React, { useEffect, useState, forwardRef } from "react";
 import Dropdown from "./dropdown";
 import { Ingredient } from "../../types/recipe.type";
 import { UnitOptions } from "../../constants/unit-options";
 
-const IngredientInput = ({ getIngredientData, index }) => {
+interface props {
+  getIngredientData: (index: number, value: Ingredient) => void;
+  index: number;
+}
+
+const IngredientInput = forwardRef<Ingredient, props>(function IngredientInput(
+  props,
+  ref
+) {
   const [ingredient, setIngredient] = useState<Ingredient["ingredient"]>();
   const [amount, setAmount] = useState<Ingredient["amount"]>();
   const [unit, setUnit] = useState<Ingredient["unit"]>();
@@ -13,13 +21,15 @@ const IngredientInput = ({ getIngredientData, index }) => {
     setUnit(data);
   };
 
+  console.log(ref);
+
   useEffect(() => {
     /**
-     * This has to go inside a useEffect that listens to only unit else it
+     * This has to go inside a useEffect else it
      * keeps causing infinite rerenders
      */
-    getIngredientData(index, { ingredient, amount, unit });
-  }, [unit]);
+    props.getIngredientData(props.index, { ingredient, amount, unit });
+  }, [ingredient, amount, unit]);
 
   // TODO:
   // add validation that all ingredient inputs are valid
@@ -31,6 +41,7 @@ const IngredientInput = ({ getIngredientData, index }) => {
         style={styles.input}
         onChangeText={(e) => setIngredient(e)}
         placeholder="Ingredient"
+        // value={}
       />
       <TextInput
         style={styles.input}
@@ -40,7 +51,7 @@ const IngredientInput = ({ getIngredientData, index }) => {
       <Dropdown options={UnitOptions} getDropdownData={getDropDownData} />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   input: {
