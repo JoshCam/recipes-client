@@ -1,57 +1,37 @@
-import { View, TextInput, StyleSheet } from "react-native";
-import React, { useEffect, useState, forwardRef } from "react";
-import Dropdown from "./dropdown";
-import { Ingredient } from "../../types/recipe.type";
-import { UnitOptions } from "../../constants/unit-options";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
-interface props {
-  getIngredientData: (index: number, value: Ingredient) => void;
-  index: number;
-}
-
-const IngredientInput = forwardRef<Ingredient, props>(function IngredientInput(
-  props,
-  ref
-) {
-  const [ingredient, setIngredient] = useState<Ingredient["ingredient"]>();
-  const [amount, setAmount] = useState<Ingredient["amount"]>();
-  const [unit, setUnit] = useState<Ingredient["unit"]>();
-
-  const getDropDownData = (data: Ingredient["unit"]) => {
-    setUnit(data);
-  };
-
-  console.log(ref);
-
-  useEffect(() => {
-    /**
-     * This has to go inside a useEffect else it
-     * keeps causing infinite rerenders
-     */
-    props.getIngredientData(props.index, { ingredient, amount, unit });
-  }, [ingredient, amount, unit]);
-
-  // TODO:
-  // add validation that all ingredient inputs are valid
-
+const FormPart = ({ index, data, onChange, onRemove }) => {
   return (
-    <View style={{ flexDirection: "row" }}>
-      {/* Ingredient input */}
+    <View key={index} style={{ flexDirection: "row" }}>
       <TextInput
         style={styles.input}
-        onChangeText={(e) => setIngredient(e)}
-        placeholder="Ingredient"
-        // value={}
+        value={data.name}
+        onChangeText={(text) => onChange(index, { ...data, name: text })}
+        placeholder="Name"
       />
       <TextInput
         style={styles.input}
-        onChangeText={(e) => setAmount(e)}
-        placeholder="Amount"
+        value={data.description}
+        onChangeText={(text) => onChange(index, { ...data, description: text })}
+        placeholder="Description"
       />
-      <Dropdown options={UnitOptions} getDropdownData={getDropDownData} />
+      <Picker
+        selectedValue={data.option}
+        onValueChange={(value) => onChange(index, { ...data, option: value })}
+      >
+        <Picker.Item label="Option 1" value="option1" />
+        <Picker.Item label="Option 2" value="option2" />
+        {/* Add more Picker.Item elements for additional options */}
+      </Picker>
+      {index > 0 && (
+        <Pressable onPress={() => onRemove(index)}>
+          <Text>Remove</Text>
+        </Pressable>
+      )}
     </View>
   );
-});
+};
 
 const styles = StyleSheet.create({
   input: {
@@ -63,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default IngredientInput;
+export default FormPart;
