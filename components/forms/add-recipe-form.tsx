@@ -1,51 +1,43 @@
 import { View, Text, StyleSheet, Pressable, TextInput } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
-// import { TextInput } from "react-native-gesture-handler";
 import { Ingredient, Recipe } from "../../types/recipe.type";
 import IngredientInput from "../inputs/ingredient";
-import FormPart from "../inputs/ingredient";
 
 const AddRecipeForm = () => {
-  const [recipe, setRecipe] = useState<Recipe>();
-  // const [recipeName, setRecipeName] = useState<Recipe["name"]>("");
-  // // Gets set for each new ingredient that gets added
-  // const [newIngredient, setNewIngredient] = useState<Ingredient>();
-  // // all our input fields are tracked with this array
-  // const ingredients = useRef<Ingredient[]>([newIngredient] ?? null);
-  // // our number of ingredient inputs
-  // const [numInputs, setNumInputs] = useState(1);
-
-  const [formData, setFormData] = useState([]);
+  const [recipe, setRecipe] = useState({});
+  const [recipeName, setRecipeName] = useState<Recipe["name"]>("");
+  const [ingredientsData, setIngredientsData] = useState([
+    { name: "", amount: "", measurement: "" },
+  ]);
 
   const handleAddPart = () => {
-    setFormData([
-      ...formData,
-      { name: "", description: "", option: "option1" },
+    setIngredientsData([
+      ...ingredientsData,
+      { name: "", amount: "", measurement: "" },
     ]);
   };
 
   const handleChange = (index, newData) => {
-    setFormData((prevData) =>
+    setIngredientsData((prevData) =>
       prevData.map((item, i) => (i === index ? newData : item))
     );
   };
 
   const handleRemovePart = (index) => {
-    setFormData((prevData) => prevData.filter((_, i) => i !== index));
+    setIngredientsData((prevData) => prevData.filter((_, i) => i !== index));
   };
 
   return (
     <View>
-      {/* <Text>Add Recipe Form</Text>
+      <Text>Add Recipe Form</Text>
       <TextInput
         style={styles.input}
         onChangeText={(e) => setRecipeName(e)}
         placeholder="Recipe Name"
-      /> */}
+      />
       <View>
-        {formData.map((data, index) => (
-          <FormPart
+        {ingredientsData.map((data, index) => (
+          <IngredientInput
             key={index}
             index={index}
             data={data}
@@ -58,7 +50,12 @@ const AddRecipeForm = () => {
         </Pressable>
       </View>
       {/* Test button */}
-      <Pressable onPress={() => console.log(formData)}>
+      <Pressable
+        onPress={async () => {
+          setRecipe({ name: recipeName, ingredientsData: ingredientsData });
+          console.log(recipe);
+        }}
+      >
         <Text>TEST</Text>
       </Pressable>
     </View>

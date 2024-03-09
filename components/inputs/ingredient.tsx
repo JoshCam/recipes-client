@@ -1,7 +1,13 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { UnitOptions } from "../../constants/unit-options";
 
-const FormPart = ({ index, data, onChange, onRemove }) => {
+/**
+ * Ingredident inputs and dropdown, dynamically added by a map
+ * @param {index, data, onChange, onRemove} params Index = number in array, data = current array of data
+ * @returns react prop of two inputs and a dropdown
+ */
+const IngredientInput = ({ index, data, onChange, onRemove }) => {
   return (
     <View key={index} style={{ flexDirection: "row" }}>
       <TextInput
@@ -12,17 +18,19 @@ const FormPart = ({ index, data, onChange, onRemove }) => {
       />
       <TextInput
         style={styles.input}
-        value={data.description}
-        onChangeText={(text) => onChange(index, { ...data, description: text })}
-        placeholder="Description"
+        value={data.amount}
+        onChangeText={(text) => onChange(index, { ...data, amount: text })}
+        placeholder="Amount"
       />
       <Picker
-        selectedValue={data.option}
-        onValueChange={(value) => onChange(index, { ...data, option: value })}
+        selectedValue={data.measurement}
+        onValueChange={(value) =>
+          onChange(index, { ...data, measurement: value })
+        }
       >
-        <Picker.Item label="Option 1" value="option1" />
-        <Picker.Item label="Option 2" value="option2" />
-        {/* Add more Picker.Item elements for additional options */}
+        {UnitOptions.map((option) => {
+          return <Picker.Item label={option.label} value={option.value} />;
+        })}
       </Picker>
       {index > 0 && (
         <Pressable onPress={() => onRemove(index)}>
@@ -43,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FormPart;
+export default IngredientInput;
