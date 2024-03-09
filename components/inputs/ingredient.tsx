@@ -1,40 +1,42 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
-import Dropdown from "./dropdown";
-import { Ingredient } from "../../types/recipe.type";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { UnitOptions } from "../../constants/unit-options";
 
-const IngredientInput = ({ getIngredientData, index }) => {
-  const [ingredient, setIngredient] = useState<Ingredient["ingredient"]>("");
-  const [amount, setAmount] = useState<Ingredient["amount"]>("");
-  const [unit, setUnit] = useState<Ingredient["unit"]>();
-
-  const getDropDownData = (data: Ingredient["unit"]) => {
-    setUnit(data);
-  };
-
-  useEffect(() => {
-    /**
-     * This has to go inside a useEffect that listens to only unit else it
-     * keeps causing infinite rerenders
-     */
-    getIngredientData(index, { ingredient, amount, unit });
-  }, [unit]);
-
+/**
+ * Ingredident inputs and dropdown, dynamically added by a map
+ * @param {index, data, onChange, onRemove} params Index = number in array, data = current array of data
+ * @returns react prop of two inputs and a dropdown
+ */
+const IngredientInput = ({ index, data, onChange, onRemove }) => {
   return (
-    <View style={{ flexDirection: "row" }}>
-      {/* Ingredient input */}
+    <View key={index} style={{ flexDirection: "row" }}>
       <TextInput
         style={styles.input}
-        onChangeText={(e) => setIngredient(e)}
-        placeholder="Ingredient"
+        value={data.name}
+        onChangeText={(text) => onChange(index, { ...data, name: text })}
+        placeholder="Name"
       />
       <TextInput
         style={styles.input}
-        onChangeText={(e) => setAmount(e)}
+        value={data.amount}
+        onChangeText={(text) => onChange(index, { ...data, amount: text })}
         placeholder="Amount"
       />
-      <Dropdown options={UnitOptions} getDropdownData={getDropDownData} />
+      <Picker
+        selectedValue={data.measurement}
+        onValueChange={(value) =>
+          onChange(index, { ...data, measurement: value })
+        }
+      >
+        {UnitOptions.map((option) => {
+          return <Picker.Item label={option.label} value={option.value} />;
+        })}
+      </Picker>
+      {index > 0 && (
+        <Pressable onPress={() => onRemove(index)}>
+          <Text>Remove</Text>
+        </Pressable>
+      )}
     </View>
   );
 };
